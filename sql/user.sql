@@ -26,15 +26,16 @@ CREATE TABLE `user` (
   `name` varchar(30) NOT NULL,
   `risk_profile` int(11) NOT NULL,
   `email` varchar(30) DEFAULT NULL,
-  `telegram_id` varchar(20) DEFAULT NULL
+  `telegram_id` varchar(20) DEFAULT NULL,
+  `credits` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`username`, `password`, `name`, `risk_profile`, `email`, `telegram_id`) VALUES
-('cedriclsm', 'cedric123', 'Cedric Lee', 3, 'cedric.lee.2018@smu.edu.sg', NULL),
-('choozy', 'choozy123', 'Choo Zheng Yang', 2, 'zychoo.2018@smu.edu.sg', NULL),
-('edwinlee', 'edwin123', 'Edwin Lee', 3, 'edwin.lee.2018@smu.edu.sg', NULL),
-('fionaaoye', 'fiona123', 'Fiona Teo', 1, 'fionaaoye@gmail.com', NULL);
+INSERT INTO `user` (`username`, `password`, `name`, `risk_profile`, `email`, `telegram_id`, `credits`) VALUES
+('cedriclsm', 'cedric123', 'Cedric Lee', 3, 'cedric.lee.2018@smu.edu.sg', NULL, 100000),
+('choozy', 'choozy123', 'Choo Zheng Yang', 2, 'zychoo.2018@smu.edu.sg', NULL, 100000),
+('edwinlee', 'edwin123', 'Edwin Lee', 3, 'edwin.lee.2018@smu.edu.sg', NULL, 100000),
+('fionaaoye', 'fiona123', 'Fiona Teo', 1, 'fionaaoye@gmail.com', NULL, 100000);

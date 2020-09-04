@@ -21,18 +21,19 @@ class User(db.Model):
     risk_profile = db.Column(db.Integer, nullable=False)
     email = db.Column(db.String(30), nullable=True)
     telegram_ID = db.Column(db.String(20), nullable=True)
+    credits = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, username, password, name, risk_profile, email, telegram_ID):
+    def __init__(self, username, password, name, risk_profile, email, telegram_ID, ecredits):
         self.username = username
         self.password = password
         self.name = name
         self.risk_profile = risk_profile
         self.email = email
         self.telegram_ID = telegram_ID
+        self.credits = credits
 
     def json(self):
-        return {"username": self.username, "password": self.password, "name": self.name, "risk_profile": self.risk_profile, 
-        "email": self.email, "telegram_ID": self.telegram_ID}
+        return {"username": self.username, "password": self.password, "name": self.name, "risk_profile": self.risk_profile, "email": self.email, "telegram_ID": self.telegram_ID, "credits":self.credits}
 
 @app.route("/user")
 def get_all():
@@ -104,6 +105,14 @@ def getEmail(username):
         email = user.email
         return jsonify({"email": email})
     return jsonify({"message": "Email not found."}), 404
+
+@app.route("/credits/<string:username>")
+def getCredits(username):
+    user = User.query.filter_by(username=username).first()
+    if user:
+        credits = user.credits
+        return jsonify({"credits": credits})
+    return jsonify({"message": "Error in retrieving credits."}), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
