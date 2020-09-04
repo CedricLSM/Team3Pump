@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect, { NextHandler } from "next-connect";
-import AccountsService from '../../../service/accounts'
+import AccountsService from '../../../services/accounts'
 import {cookieHeaderValueFromAccountSession} from '../../../utils/cookie'
 
 const handler = nextConnect();

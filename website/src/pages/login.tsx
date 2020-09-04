@@ -1,5 +1,5 @@
 import React from 'react';
-import { NextComponentType, NextPageContext } from 'next'
+import { NextComponentType, NextPageContext, GetServerSideProps } from 'next'
 import LoginComponent from '../components/login/LoginComponent';
 import { useRouter } from "next/router"
 import styles from './login.module.scss';
