@@ -19,7 +19,10 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `portfolio`
 --
+CREATE DATABASE IF NOT EXISTS portfolio DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE portfolio;
 
+DROP TABLE IF EXISTS `portfolio`;
 CREATE TABLE `portfolio` (
 	`username` VARCHAR(20) NOT NULL,
     `stock_ticker` VARCHAR(10) NOT NULL,

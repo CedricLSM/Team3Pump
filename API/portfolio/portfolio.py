@@ -47,14 +47,14 @@ def get_all_portfolio():
 def get_portfolio_by_username(username):
     portfolio = {"portfolio": [portfolio.json() for portfolio in Portfolio.query.filter_by(username=username).all()]}
     if portfolio:
-        return jsonify(portfolio.json())
+        return jsonify(portfolio)
     return jsonify({"message": "No stocks found."}), 404
 
 @app.route("/portfolio/<string:username>/<string:stock_ticker>")
 def get_portfolio_by_stock(username, stock_ticker):
     portfolio = {"portfolio": [portfolio.json() for portfolio in Portfolio.query.filter_by(username=username, stock_ticker=stock_ticker).all()]}
     if portfolio:
-        return jsonify(portfolio.json())
+        return jsonify(portfolio)
     return jsonify({"message": "No stocks found."}), 404
 
 @app.route("/portfolio", methods=['POST'])
