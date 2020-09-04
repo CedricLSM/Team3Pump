@@ -20,20 +20,22 @@ class Portfolio(db.Model):
     stock_ticker = db.Column(db.String(10), primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
     date_time = db.Column(db.DateTime, primary_key=True)
+    price = db.Column(db.Integer, nullable=False)
     buy = db.Column(db.Boolean, nullable=False)
     # to indicate whether it is a buy/sell, buy=1 and sell=0
 
 
-    def __init__(self, username, stock_ticker, quantity, date_time, buy):
+    def __init__(self, username, stock_ticker, quantity, date_time, price, buy):
         self.username = username
         self.stock_ticker = stock_ticker
         self.quantity = quantity
         self.date_time = date_time
+        self.price = price
         self.buy = buy
         
     def json(self):
         return {"username": self.username, "stock_ticker": self.stock_ticker, "quantity": self.quantity,
-        "date_time": self.date_time,"buy": self.buy}
+        "date_time": self.date_time, "price": self.price, "buy": self.buy}
 
 '''
 Functions for Portfolio
