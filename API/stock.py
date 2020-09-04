@@ -5,10 +5,10 @@ app = Flask(__name__)
 
 @app.route("/getstock")
 def get_stock():
-    stock=request.args.get('symbol',default="TSLA")
+    stock=request.args.get('symbol',default="GOOG")
     ticker=Ticker(stock)
     data= ticker.summary_detail
-    news= ticker.news(25)
+    news= ticker.news(5)
     return jsonify(data,news)
 
 @app.route("/stockhistory")
