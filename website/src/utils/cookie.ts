@@ -24,7 +24,7 @@ export const cookieHeaderValueFromAccountSession = (accountSession: AccountDto) 
   const tokenExpiresAt = new Date().getTime() + TOKEN_EXPIRES_IN_MILLIS
 
   return [
-    serializeCookie(USER_ID, accountSession.accountId, cookieOptions, 'High'),
+    serializeCookie(USER_ID, accountSession.email, cookieOptions, 'High'),
     serializeCookie(TOKEN_EXPIRES_AT, String(tokenExpiresAt), cookieOptions, 'High'),
   ]
 }
