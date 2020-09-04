@@ -16,16 +16,15 @@ CORS(app)
 class Portfolio(db.Model):
     __tablename__ = 'portfolio'
 
-    username = db.Column(db.String(64), primary_key=True)
-    stock_ticker = db.Column(db.String(64), primary_key=True)
-    quantity = db.Column(db.Integer(64), nullable=False)
-    price = db.Column(db.String(64), nullable=False)
-    date_time = db.Column(db.String(64), primary_key=True)
-    buy = db.Column(db.Integer, nullable=False)
+    username = db.Column(db.String(20), primary_key=True)
+    stock_ticker = db.Column(db.String(10), primary_key=True)
+    quantity = db.Column(db.Integer, nullable=False)
+    date_time = db.Column(db.DateTime, primary_key=True)
+    buy = db.Column(db.Boolean, nullable=False)
     # to indicate whether it is a buy/sell, buy=1 and sell=0
 
 
-    def __init__(self, username, stock_ticker, quantity, price, date_time.time, buy):
+    def __init__(self, username, stock_ticker, quantity, date_time, buy):
         self.username = username
         self.stock_ticker = stock_ticker
         self.quantity = quantity
@@ -33,7 +32,7 @@ class Portfolio(db.Model):
         self.buy = buy
         
     def json(self):
-        return {"username": self.username, "stock_ticker": self.stock_ticker, "quantity": self.quantity, "price": self.price,
+        return {"username": self.username, "stock_ticker": self.stock_ticker, "quantity": self.quantity,
         "date_time": self.date_time,"buy": self.buy}
 
 '''
@@ -41,7 +40,7 @@ Functions for Portfolio
 '''
 @app.route("/portfolio")
 def get_all_portfolio():
-    return jsonify({"portfolio": [Portfolio.json() for portfolio in Portfolio.query.all()]})
+    return jsonify({"portfolio": [portfolio.json() for portfolio in Portfolio.query.all()]})
 
 
 @app.route("/portfolio/username/<string:username>")
@@ -51,7 +50,7 @@ def get_portfolio_by_username(username):
         return jsonify(portfolio.json())
     return jsonify({"message": "No stocks found."}), 404
 
-@app.route("/portfolio/<string:username>/<string:stock_ticker")
+@app.route("/portfolio/<string:username>/<string:stock_ticker>")
 def get_portfolio_by_stock(username, stock_ticker):
     portfolio = {"portfolio": [portfolio.json() for portfolio in Portfolio.query.filter_by(username=username, stock_ticker=stock_ticker).all()]}
     if portfolio:
