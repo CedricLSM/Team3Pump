@@ -1,3 +1,3 @@
 export default interface AccountDto {
-    accountId?: string
+    email?: string
 }

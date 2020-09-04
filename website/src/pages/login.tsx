@@ -8,7 +8,6 @@ const login: NextComponentType<NextPageContext, any> = () => {
     const router = useRouter();
 
     const handleSuccessLogin = () => {
-        console.log('success')
         if (typeof router.query.redirectPath === 'string' && router.query.redirectPath !== '') {
             window.location.href = router.query.redirectPath
         } else {
