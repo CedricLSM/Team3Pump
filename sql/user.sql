@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 04, 2020 at 08:38 AM
+-- Generation Time: Sep 04, 2020 at 09:19 AM
 -- Server version: 5.7.26
 -- PHP Version: 7.3.8
 
@@ -11,7 +11,7 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
--- Database: `goldman`
+-- Database: `user`
 --
 
 -- --------------------------------------------------------
@@ -38,13 +38,3 @@ INSERT INTO `user` (`username`, `password`, `name`, `risk_profile`, `email`, `te
 ('choozy', 'choozy123', 'Choo Zheng Yang', 2, 'zychoo.2018@smu.edu.sg', NULL),
 ('edwinlee', 'edwin123', 'Edwin Lee', 3, 'edwin.lee.2018@smu.edu.sg', NULL),
 ('fionaaoye', 'fiona123', 'Fiona Teo', 1, 'fionaaoye@gmail.com', NULL);
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`username`);
