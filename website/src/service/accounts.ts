@@ -15,6 +15,10 @@ export class AccountsService {
             return {email: email}
         }
     }
+
+    signup = async (email: string, password: string) : Promise<AccountDto> => {
+        return {email: email}
+    }
 }
 
 export default new AccountsService();
