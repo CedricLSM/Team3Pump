@@ -10,7 +10,7 @@ app = Flask(____name____)
 def display_quote():
   symbol = request.args.get('symbol', default="AAPL")
 
-  quote = yf.Ticker(symbol
+  quote = yf.Ticker(symbol)
 
   return quote.info
 
