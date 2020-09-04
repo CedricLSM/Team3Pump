@@ -1,7 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import axios from 'axios';
 import LoginRequest from '../../shared/dto/LoginRequest'
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 
 interface IProps {
     handleSuccessLogin: () => void;
@@ -14,31 +14,10 @@ const LoginComponent = (props: IProps) => {
     const [emailError, setEmailError] = useState<string>();
     const [passwordError, setPasswordError] = useState<string>();
     const [loginError, setLoginError] = useState<string>();
-    const validateUser = (email: string) => {
-        const regex = /^(([^<>()\]\\.,;:\s@"]+(\.[^<>()\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-        if (regex.test(email)) {
-            return true
-        }
-        setEmailError("Invalid Email")
-        return false
-    }
-
-
-    const validatePassword = (password: string) => {
-        const regex = /^(?=.*\d).{6,}$/
-        if (regex.test(password)) {
-            return true
-        }
-        setPasswordError("Invalid Password")
-        return false
-    }
 
     const handleSubmit = ((e:  FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!(validateUser(email) && validatePassword(password))) {
-            return;
-        }
+        setLoginError("");
 
         const loginEndpoint = '/api/accounts/login';
         const loginData: LoginRequest = {
@@ -48,18 +27,19 @@ const LoginComponent = (props: IProps) => {
 
         axios.post(loginEndpoint, loginData).then(res => {
             //redirect -> call callback function to handleLoginSuccess
-            if (res.data.accountId) {
+            console.log("test");
+            console.log(res);
+            if (res.data.email) {
                 props.handleSuccessLogin();
             }
             else {
-                setLoginError('Invalid Login Credentials')
+                setLoginError('Invalid Username / Password')
             }
         })
     })
 
     return (
         <Form onSubmit={handleSubmit}>
-            {loginError ? <span>{loginError}</span>: ''}
             <Form.Group>
                 <Form.Label>Email:</Form.Label>
                 <Form.Control type="email" onChange={e => setEmail(e.target.value)} defaultValue={email}/>
@@ -71,6 +51,7 @@ const LoginComponent = (props: IProps) => {
                 {passwordError ? <span>{passwordError}</span> : ''}
             </Form.Group>
             <Button type="submit">Submit</Button>
+            {loginError ? <Alert variant="danger" className="mt-2">{loginError}</Alert>: ''}
         </Form>
     );
 }
