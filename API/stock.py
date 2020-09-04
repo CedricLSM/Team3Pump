@@ -1,13 +1,15 @@
-from flask import Flask, request, render_template
-import yfinance as yf
+from flask import Flask, request, render_template , jsonify
+from yahooquery import Ticker
 
 app = Flask(__name__)
 
 @app.route("/getstock")
 def get_stock():
-	stockticker = request.args.get('symbol', default="AAPL")
-	quote = yf.Ticker(stockticker)
-	return quote.info
+    stock=request.args.get('symbol',default="TSLA")
+    ticker=Ticker(stock)
+    data= ticker.summary_detail
+    news= ticker.news(25)
+    return jsonify(data,news)
 
 @app.route("/stockhistory")
 def get_stock_history():
