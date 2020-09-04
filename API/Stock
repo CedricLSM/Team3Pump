@@ -1,18 +1,27 @@
 from flask import Flask, request, render_template
 import yfinance as yf
+
 app = Flask(__name__)
-from flask import Flask, request, render_template
-import yfinance as yf
 
-app = Flask(____name____)
+@app.route("/getstock")
+def get_stock():
+	stockticker = request.args.get('symbol', default="AAPL")
+	quote = yf.Ticker(stockticker)
+	return quote.info
 
-@app.route("/quote")
-def display_quote():
-  symbol = request.args.get('symbol', default="AAPL")
+@app.route("/stockhistory")
+def get_stock_history():
+	stockticker = request.args.get('symbol', default="AAPL")
+	period = request.args.get('period', default="1y")
+	interval = request.args.get('interval', default="1mo")
+	quote = yf.Ticker(stockticker)	
+	hist = quote.history(period=period, interval=interval)
+	data = hist.to_json()
+	return data
 
-  quote = yf.Ticker(symbol)
+@app.route("/")
+def home():
+    return render_template("homepage.html")
 
-  return quote.info
-
-if ____name____ == "____main____":
-  app.run(debug=True)
+if __name__ == "__main__":
+	app.run(debug=True)
