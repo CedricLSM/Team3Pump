@@ -28,9 +28,9 @@ CREATE TABLE `portfolio` (
     `stock_ticker` VARCHAR(10) NOT NULL,
     `quantity` INT NOT NULL,
     `date_time` DATETIME NOT NULL,
+    `price` FLOAT NOT NULL,
     `buy` BOOLEAN  NOT NULL,
-    PRIMARY KEY (`username`, `stock_ticker`, `date_time`),
-    FOREIGN KEY (`username`) references `user` (`username`)
+    PRIMARY KEY (`username`, `stock_ticker`, `date_time`)
 ); ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -38,11 +38,11 @@ CREATE TABLE `portfolio` (
 --
 
 INSERT INTO portfolio 
-(username, stock_ticker, quantity, date_time, buy)
+(username, stock_ticker, quantity, date_time, price, buy)
 VALUES 
-('edwinlee', 'TSLA', '25', '2020-01-09 15:45:21','1'),
-('choozy', 'MSFT', '50', '2020-01-23 20:45:21','1'),
-('cedriclsm', 'NFLX', '20', '2020-02-09 09:30:01','1'),
-('edwinlee', 'TSLA', '10', '2020-03-22 22:12:21','0');
+('edwinlee', 'TSLA', '25', '2020-01-09 15:45:21', 500 ,'1'),
+('choozy', 'MSFT', '50', '2020-01-23 20:45:21', 1500, '1'),
+('cedriclsm', 'NFLX', '20', '2020-02-09 09:30:01', 100, '1'),
+('edwinlee', 'TSLA', '10', '2020-03-22 22:12:21', 250, '0');
 
 commit;
