@@ -17,9 +17,9 @@ const StockChartComponent = (props: IProps) => {
               type: 'scatter'
             }
           ]}
-          layout={{width: 320, height: 240, title: 'A Fancy Plot'}}
+          layout={{width: 320, height: 240, title: 'Sample Plot'}}
         />
       );
 }
 
-export {StockChartComponent};
+export default StockChartComponent;
