@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from os import environ
+import collections 
 
 app = Flask(__name__)
 
@@ -50,13 +51,28 @@ def get_portfolio_tickers():
     stockSymbols = [portfolio.stock_ticker for portfolio in Portfolio.query.all()]
     return {"tickers":stockSymbols}
 
-    # return jsonify({"portfolio": [portfolio.json() for portfolio in Portfolio.query.all()]})
-
 @app.route("/portfolio/username/<string:username>")
 def get_portfolio_by_username(username):
     portfolio = {"portfolio": [portfolio.json() for portfolio in Portfolio.query.filter_by(username=username).all()]}
     if portfolio:
         return jsonify(portfolio)
+    return jsonify({"message": "No stocks found."}), 404
+
+@app.route("/currentHoldings/<string:username>")
+def get_current_holdings(username):
+    portfolio = [portfolio.json() for portfolio in Portfolio.query.filter_by(username=username).all()]
+    di = collections.defaultdict(int)
+
+    for stocks in portfolio:
+        if stocks["buy"]:
+            di[stocks["stock_ticker"]] += stocks["quantity"]
+        else:
+            di[stocks["stock_ticker"]] -= stocks["quantity"]
+        if di[stocks["stock_ticker"]] <= 0:
+            del di[stocks["stock_ticker"]]
+
+    if di:
+        return jsonify(di)
     return jsonify({"message": "No stocks found."}), 404
 
 @app.route("/portfolio/<string:username>/<string:stock_ticker>")
