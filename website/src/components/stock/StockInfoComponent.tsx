@@ -1,19 +1,27 @@
 
-import React from 'react';
+import React, { useState, MouseEvent } from 'react';
 import { Card, Table, Button } from 'react-bootstrap';
+import { AiOutlineEdit } from "react-icons/ai";
 
 interface IProps {
     ticker: string,
+    changeTicker: (ticker: string) => void;
     info?: any,
     news?: any
 }
 
 const StockInfoComponent = (props: IProps) => {
+
+    const [edit, setEdit] = useState<boolean>(false);
     
+    const onClick = (e: MouseEvent<HtmlElement, MouseEvent>) => {
+        setEdit(true);
+    }
+
     return (
         <Card>
             <Card.Body>
-                <Card.Title className="text-uppercase font-weight-bold">{props.ticker}</Card.Title>
+                <Card.Title className="text-uppercase font-weight-bold">{props.ticker}<Button onClick={onClick()}><AiOutlineEdit /></Button></Card.Title>
                 {
                     props.info ?
                     <Card.Text>
