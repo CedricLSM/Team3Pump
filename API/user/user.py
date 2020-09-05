@@ -2,12 +2,13 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from os import environ
+import hashlib
 
 app = Flask(__name__)
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:@localhost:3306/user'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:@localhost:3306/gm3pump'
 
 db = SQLAlchemy(app)
 CORS(app)
@@ -65,6 +66,8 @@ def getUserByID(email):
 def createProfile():
     data = request.get_json()
     email = data['email']
+    password=data['password']
+    password=hashlib.md5(password.encode())
     
     if (User.query.filter_by(email=email).first()):
         return jsonify({"message": "Email '{}' already exists.".format(email)}), 400
