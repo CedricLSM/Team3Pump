@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/user'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:@localhost:3306/gm3pump'
 
 db = SQLAlchemy(app)
 CORS(app)
@@ -45,8 +45,8 @@ def authenticate():
     user = User.query.filter_by(email=email, password=password).first()
     
     if user:
-        name = user.name
-        return jsonify({"message": "Welcome, {}!".format(name)}), 201
+        email = user.email
+        return jsonify({"email":email}), 201
     return jsonify({"message": "Invalid email or password."}), 404
 
 @app.route("/profile/<string:email>")
