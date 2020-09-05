@@ -1,5 +1,5 @@
 import React from 'react';
-import { NextComponentType, NextPageContext } from 'next'
+import { NextComponentType, NextPageContext, GetServerSideProps } from 'next'
 import LoginComponent from '../components/login/LoginComponent';
 import { useRouter } from "next/router"
 import styles from './login.module.scss';
@@ -8,7 +8,6 @@ const login: NextComponentType<NextPageContext, any> = () => {
     const router = useRouter();
 
     const handleSuccessLogin = () => {
-        console.log('success')
         if (typeof router.query.redirectPath === 'string' && router.query.redirectPath !== '') {
             window.location.href = router.query.redirectPath
         } else {

@@ -1,30 +1,27 @@
 import Head from 'next/head'
 import styles from '../../styles/Home.module.css'
 import { NextComponentType, NextPageContext, GetServerSideProps } from "next";
-import ProductsService from '../service/products';
-import ProductDto from '../shared/dto/Product';
-import ProductsContainer from '../components/browse-product/containers/ProductsContainer';
-import FilterContainer from '../components/browse-product/containers/FilterContainer';
+import DefaultLayout from '../components/layouts/defaultlayout';
+import { useRouter } from 'next/router';
+import { parse } from 'cookie';
+import { useEffect } from 'react';
 
-interface IProps
- {
-	products: ProductDto[],
-  categories: string[],      
-  selectedCategory?: string,
+
+interface IProps {
+  redirect?: string
 }
 
 export const getServerSideProps: GetServerSideProps<IProps> = async (context) => {
   const { query, req, res } = context
 
-	const products = query.category ? await ProductsService.getProductsByCategory(query.category as string) : await ProductsService.getAllProducts();
-  const categories = await ProductsService.getCategories();
-  
   let props: any
 
   props = {
-      products: products,
-      categories: categories,
-    }
+  }
+
+  if (!req.headers.cookie || !parse(req.headers.cookie).userId) {
+    props.redirect = '/login';
+  }
   
   // deletes undefined items in props
   Object.keys(props).forEach(key => {
@@ -34,15 +31,23 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
 	return {props: props}
 }
 
-const Home: NextComponentType<NextPageContext, any, IProps> = (props) => {
+const Home: NextComponentType<NextPageContext, any, IProps> = (props: IProps) => {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (props.redirect) {
+      router.push(props.redirect)
+    }
+  }, [])
 
 	return (
 		<>
 		<Head>
-			<title>Products</title>
+			<title>Portfolio</title>
 		</Head>
-    <FilterContainer categories={props.categories} selectedCategory={props.selectedCategory}/>
-    <ProductsContainer products={props.products}/>
+    <DefaultLayout>
+      Portfolio
+    </DefaultLayout>
 		</>
 	)
 }

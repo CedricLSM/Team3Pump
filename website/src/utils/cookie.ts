@@ -1,5 +1,6 @@
 import { serialize } from 'cookie'
 import AccountDto from '../shared/dto/AccountDto'
+import { NextApiRequest } from 'next'
 
 const TOKEN_EXPIRES_IN_MILLIS = 30 * 60 * 1000
 
@@ -24,7 +25,12 @@ export const cookieHeaderValueFromAccountSession = (accountSession: AccountDto) 
   const tokenExpiresAt = new Date().getTime() + TOKEN_EXPIRES_IN_MILLIS
 
   return [
-    serializeCookie(USER_ID, accountSession.accountId, cookieOptions, 'High'),
+    serializeCookie(USER_ID, accountSession.email, cookieOptions, 'High'),
     serializeCookie(TOKEN_EXPIRES_AT, String(tokenExpiresAt), cookieOptions, 'High'),
   ]
+}
+
+
+export const checkCookies = async (cookies) : Promise<string>=> {
+  return cookies.email;
 }

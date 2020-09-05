@@ -1,35 +1,39 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import axios from 'axios';
 import LoginRequest from '../../shared/dto/LoginRequest'
-import { Form, Button, Alert, Row, Col } from 'react-bootstrap';
+import { Form, Button, Alert, Col, Row } from 'react-bootstrap';
 
 interface IProps {
-    handleSuccessLogin: () => void;
-    navigateToSignUp: () => void;
+    handleSuccessSignup: () => void;
 }
 
-const LoginComponent = (props: IProps) => {
+const SignupComponent = (props: IProps) => {
     const [email, setEmail] = useState<string>();
     const [password, setPassword] = useState<string>();
-    const [loginError, setLoginError] = useState<string>();
+    const [signupError, setSignupError] = useState<string>();
 
     const handleSubmit = ((e:  FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setLoginError("");
+        setSignupError("");
 
-        const loginEndpoint = '/api/accounts/login';
-        const loginData: LoginRequest = {
+        if (password.length < 6) {
+            setSignupError("Password must have 6 characters or more!");
+            return;
+        }
+
+        const signupEndpoint = '/api/accounts/signup';
+        const signupData: LoginRequest = {
             email: email,
             password: password
         }
 
-        axios.post(loginEndpoint, loginData).then(res => {
+        axios.post(signupEndpoint, signupData).then(res => {
             //redirect -> call callback function to handleLoginSuccess
             if (res.data.email) {
-                props.handleSuccessLogin();
+                props.handleSuccessSignup();
             }
             else {
-                setLoginError('Invalid Username / Password')
+                setSignupError('Username is in use!')
             }
         })
     })
@@ -45,18 +49,18 @@ const LoginComponent = (props: IProps) => {
                     <Form.Label>Password:</Form.Label>
                     <Form.Control type="password" onChange={e => setPassword(e.target.value)} defaultValue={password}/>
                 </Form.Group>
-                <Row> 
-                    <Button type="submit" variant="primary" block className="mx-3">Login</Button>
+                <Row>
+                    <Button type="submit" variant="primary" block className="mx-3">Sign Up</Button>
                 </Row>
                 <Row className="mt-2">
-                    <Button href="/signup" variant="primary" block className="mx-3">No Account? Sign Up</Button>
+                    <Button href="/login" variant="primary" block className="mx-3">Have an account? Login</Button>
                 </Row>
                 <Row>
-                    {loginError ? <Alert variant="danger" className="mt-2 mx-3 block text-center w-100">{loginError}</Alert>: ''}
+                    {signupError ? <Alert variant="danger" className="mt-2 mx-3 block text-center w-100">{signupError}</Alert>: ''}
                 </Row>
             </Form>
         </Col>
     );
 }
 
-export default LoginComponent;
+export default SignupComponent;
