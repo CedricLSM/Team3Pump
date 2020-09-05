@@ -24,7 +24,7 @@ USE article;
 
 DROP TABLE IF EXISTS `article`;
 CREATE TABLE `article` (
-    `articleId` INT NOT NULL,
+    `articleId` INT NOT NULL AUTO_INCREMENT,
     `articleName` VARCHAR(100) NOT NULL,
     `articleDescription` VARCHAR(100) NOT NULL,
     `articleBody` TEXT NOT NULL,
