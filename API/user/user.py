@@ -2,12 +2,13 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from os import environ
+import hashlib
 
 app = Flask(__name__)
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/user'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:@localhost:3306/gm3pump'
 
 db = SQLAlchemy(app)
 CORS(app)
@@ -15,25 +16,23 @@ CORS(app)
 class User(db.Model):
     __tablename__ = 'user'
 
-    username = db.Column(db.String(20), primary_key=True)
+    email = db.Column(db.String(30), primary_key=True)
     password = db.Column(db.String(512), nullable=False)
     name = db.Column(db.String(30), nullable=False)
     risk_profile = db.Column(db.Integer, nullable=False)
-    email = db.Column(db.String(30), nullable=True)
     telegram_ID = db.Column(db.String(20), nullable=True)
     credits = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, username, password, name, risk_profile, email, telegram_ID, ecredits):
-        self.username = username
+    def __init__(self, email, password, name, risk_profile, telegram_ID = None, credits = 10000):
+        self.email = email
         self.password = password
         self.name = name
         self.risk_profile = risk_profile
-        self.email = email
         self.telegram_ID = telegram_ID
         self.credits = credits
 
     def json(self):
-        return {"username": self.username, "password": self.password, "name": self.name, "risk_profile": self.risk_profile, "email": self.email, "telegram_ID": self.telegram_ID, "credits":self.credits}
+        return {"email": self.email, "name": self.name, "risk_profile": self.risk_profile, "telegram_ID": self.telegram_ID, "credits":self.credits}
 
 @app.route("/user")
 def get_all():
@@ -42,32 +41,38 @@ def get_all():
 @app.route("/login", methods=["POST"])
 def authenticate():
     data = request.get_json()
-    username = data['username']
+    email = data['email']
     password = data['password']
-    user = User.query.filter_by(username=username, password=password).first()
+    user = User.query.filter_by(email=email, password=password).first()
     
     if user:
-        name = user.name
-        return jsonify({"message": "Welcome, {}!".format(name)}), 201
-    return jsonify({"message": "Invalid username or password."}), 404
+        email = user.email
+        return jsonify({"email":email}), 201
+    return jsonify({"message": "Invalid email or password."}), 404
 
-@app.route("/profile/<string:username>")
-def getUserByID(username):
-    profile = User.query.filter_by(username=username).first()
+@app.route("/profile/<string:email>")
+def getUserByID(email):
+    profile = User.query.filter_by(email=email).first()
+    email=profile.email
+    name=profile.name
+    risk_profile=profile.name
+    telegram_ID=profile.telegram_ID
+    credits=profile.credits
     if profile:
-        return jsonify(profile.json())
+        return jsonify({"email":email,"name":name,"risk_profile":risk_profile, "telegram_ID":telegram_ID,"credits":credits})
     return jsonify({"message": "User not found."}), 404
 
 @app.route("/create", methods=['POST'])
 def createProfile():
     data = request.get_json()
-    username = data['username']
+    email = data['email']
+    password=data['password']
+    password=hashlib.md5(password.encode())
     
-    if (User.query.filter_by(username=username).first()):
-        return jsonify({"message": "Username '{}' already exists.".format(username)}), 400
+    if (User.query.filter_by(email=email).first()):
+        return jsonify({"message": "Email '{}' already exists.".format(email)}), 400
 
     user = User(**data)
-
     try:
         db.session.add(user)
         db.session.commit()
@@ -98,21 +103,21 @@ def createProfile():
 
 #         return jsonify(result),status
 
-@app.route("/email/<string:username>")
-def getEmail(username):
-    user = User.query.filter_by(username=username).first()
-    if user:
-        email = user.email
-        return jsonify({"email": email})
-    return jsonify({"message": "Email not found."}), 404
+# @app.route("/email/<string:username>")
+# def getEmail(username):
+#     user = User.query.filter_by(username=username).first()
+#     if user:
+#         email = user.email
+#         return jsonify({"email": email})
+#     return jsonify({"message": "Email not found."}), 404
 
-@app.route("/credits/<string:username>")
-def getCredits(username):
-    user = User.query.filter_by(username=username).first()
-    if user:
-        credits = user.credits
-        return jsonify({"credits": credits})
-    return jsonify({"message": "Error in retrieving credits."}), 404
+# @app.route("/credits/<string:email>")
+# def getCredits(email):
+#     user = User.query.filter_by(email=email).first()
+#     if user:
+#         credits = user.credits
+#         return jsonify({"credits": credits})
+#     return jsonify({"message": "Error in retrieving credits."}), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
