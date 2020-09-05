@@ -24,7 +24,7 @@ const LogoutComponent = () => {
     })
 
     return (
-        <Button variant="dark" onClick={handleClick}>Log Out</Button>
+        <Button onClick={handleClick}>Log Out</Button>
     );
 }
 

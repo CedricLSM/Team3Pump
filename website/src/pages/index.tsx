@@ -5,7 +5,6 @@ import DefaultLayout from '../components/layouts/defaultlayout';
 import { useRouter } from 'next/router';
 import { parse } from 'cookie';
 import { useEffect } from 'react';
-import PortfolioTableComponent from '../components/portfolio/PortfolioTableComponent';
 
 
 interface IProps {
@@ -47,7 +46,7 @@ const Home: NextComponentType<NextPageContext, any, IProps> = (props: IProps) =>
 			<title>Portfolio</title>
 		</Head>
     <DefaultLayout>
-      <PortfolioTableComponent />
+      Portfolio
     </DefaultLayout>
 		</>
 	)
