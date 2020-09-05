@@ -21,13 +21,14 @@ export class AccountsService {
     }
 
     signup = async (email: string, password: string) : Promise<AccountDto | void> => {
-        axios.post(`${this.endpoint}/signup`, {'username': email, 'password': password}).then(
+        axios.post(`${this.endpoint}/signup`, {'username': email, 'password': password})
+        .then(
             (r) => {
                 if (r.status == 201) {
                     return {'email': email};
                 }
             }
-        )
+        ).catch(err => console.log(err))
     }
 }
 
