@@ -4,31 +4,31 @@ import axios from "axios";
 export class AccountsService {
 
     private endpoint: string
-    private password: string
 
     constructor() {
         this.endpoint = 'http://localhost:5000'
     }
 
     login = async (email: string, password: string) : Promise<AccountDto | void> => {
-        return axios.post(`${this.endpoint}/login`, {'username': email, 'password': password}).then(
-            (r) => {
-                if (r.status == 201) {
-                    return {'email': email};
-                }
-            }
-        )
-    }
-
-    signup = async (email: string, password: string) : Promise<AccountDto | void> => {
-        axios.post(`${this.endpoint}/signup`, {'username': email, 'password': password})
+        return axios.post(`${this.endpoint}/login`, {'username': email, 'password': password})
         .then(
             (r) => {
                 if (r.status == 201) {
                     return {'email': email};
                 }
             }
-        ).catch(err => console.log(err))
+        ) .catch(err => console.log(err))
+    }
+
+    signup = async (email: string, password: string, name: string, riskProfile: number, telegramId?: string) : Promise<AccountDto | void> => {
+        return axios.post(`${this.endpoint}/create`, {'email': email, 'password': password, "name": name, "risk_profile": riskProfile, "telegram_ID": telegramId})
+        .then(
+            (r) => {
+                if (r.status == 201) {
+                    return {'email': email};
+                }
+            }
+        ) .catch(err => console.log(err))
     }
 }
 
