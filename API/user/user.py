@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:@localhost:3306/gm3pump'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:@localhost:3306/user'
 
 db = SQLAlchemy(app)
 CORS(app)
@@ -22,7 +22,7 @@ class User(db.Model):
     telegram_ID = db.Column(db.String(20), nullable=True)
     credits = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, email, password, name, risk_profile, telegram_ID, ecredits):
+    def __init__(self, email, password, name, risk_profile, telegram_ID = None, credits = 10000):
         self.email = email
         self.password = password
         self.name = name
@@ -31,7 +31,7 @@ class User(db.Model):
         self.credits = credits
 
     def json(self):
-        return {"email": self.email, "password": self.password, "name": self.name, "risk_profile": self.risk_profile, "telegram_ID": self.telegram_ID, "credits":self.credits}
+        return {"email": self.email, "name": self.name, "risk_profile": self.risk_profile, "telegram_ID": self.telegram_ID, "credits":self.credits}
 
 @app.route("/user")
 def get_all():
@@ -65,7 +65,6 @@ def createProfile():
         return jsonify({"message": "Email '{}' already exists.".format(email)}), 400
 
     user = User(**data)
-
     try:
         db.session.add(user)
         db.session.commit()
