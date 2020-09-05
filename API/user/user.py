@@ -52,8 +52,13 @@ def authenticate():
 @app.route("/profile/<string:email>")
 def getUserByID(email):
     profile = User.query.filter_by(email=email).first()
+    email=profile.email
+    name=profile.name
+    risk_profile=profile.name
+    telegram_ID=profile.telegram_ID
+    credits=profile.credits
     if profile:
-        return jsonify(profile.json())
+        return jsonify({"email":email,"name":name,"risk_profile":risk_profile, "telegram_ID":telegram_ID,"credits":credits})
     return jsonify({"message": "User not found."}), 404
 
 @app.route("/create", methods=['POST'])
