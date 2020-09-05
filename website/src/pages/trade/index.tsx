@@ -8,7 +8,6 @@ import StockService from '../../services/stock';
 import StockInfoComponent from '../../components/stock/StockInfoComponent';
 import { Row, Col, Alert } from 'react-bootstrap';
 import dynamic from 'next/dynamic'
-import axios from 'axios';
 
 const StockChartComponent = dynamic(() =>
   import('../../components/stock/StockChartComponent'),
@@ -54,8 +53,7 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
 const Trade: NextComponentType<NextPageContext, any, IProps> = (props: IProps) => {
   const router = useRouter();
   const [ticker, setTicker] = useState<string>(props.ticker);
-  const [info, setInfo] = useState(props.result[0][props.ticker]);
-  const [news, setNews] = useState(props.result[1])
+  const [result, setResult] = useState(props.result);
   const [historicalPrice, setHistoricalPrice] = useState(props.historicalPrice)
 
 
@@ -65,17 +63,9 @@ const Trade: NextComponentType<NextPageContext, any, IProps> = (props: IProps) =
     }
   }, [])
 
-  useEffect(() => {
-    console.log(ticker);
-    axios.get('/api/stock/stock', {params: {ticker: ticker}})
-        .then((r) => {
-            console.log(r);
-            setNews(r.data[1])
-            setInfo(r.data[0][ticker])
-        })
-    // axios.get('/api/stock/stockhistory', {params: {symbol: ticker}})
-    //     .then((r) => setHistoricalPrice(r))
-  }, [ticker])
+//   useEffect(() => {
+//     console.log('ticker changed');
+//   }, [ticker])
 
 	return (
 		<>
@@ -83,14 +73,19 @@ const Trade: NextComponentType<NextPageContext, any, IProps> = (props: IProps) =
 			<title>Portfolio</title>
 		</Head>
         <DefaultLayout>
+        {
+            (result[0][ticker].bid && result[0][ticker].ask) ?
             <Row>
                 <Col xs={6}>
                     {/* <StockChartComponent date={historicalPrice.date} open={historicalPrice.open} close={historicalPrice.close} high={historicalPrice.high} low={historicalPrice.low}/> */}
                 </Col>
                 <Col xs={6}>
-                    <StockInfoComponent ticker={ticker} info={info} news={news} setTicker={setTicker}/>
+                    {/* <StockInfoComponent ticker={ticker} info={result[0][props.ticker]} news={result[1]} changeTicker={setTicker}/> */}
                 </Col>
             </Row>
+            :
+            <Alert variant="warning">No Stock Information Found!</Alert>
+        }
         </DefaultLayout>
 		</>
 	)

@@ -1,11 +1,11 @@
 
-import React, { useState, MouseEvent, FormEvent } from 'react';
-import { Card, Table, Button, Form, Row, Col, Alert } from 'react-bootstrap';
+import React, { useState, MouseEvent } from 'react';
+import { Card, Table, Button } from 'react-bootstrap';
 import { AiOutlineEdit } from "react-icons/ai";
 
 interface IProps {
     ticker: string,
-    setTicker: any;
+    changeTicker: (ticker: string) => void;
     info?: any,
     news?: any
 }
@@ -13,51 +13,17 @@ interface IProps {
 const StockInfoComponent = (props: IProps) => {
 
     const [edit, setEdit] = useState<boolean>(false);
-    const [newTicker, setNewTicker] = useState<string>("");
     
-    const onClick = () => {
+    const onClick = (e: MouseEvent<HtmlElement, MouseEvent>) => {
         setEdit(true);
     }
-
-    const cancelSearch = () => {
-        setEdit(false);
-    }
-
-    const handleSubmit = ((e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setEdit(false);
-        props.setTicker(newTicker);
-    })
-
-    console.log(props.news);
 
     return (
         <Card>
             <Card.Body>
-                <Card.Title className="text-uppercase font-weight-bold">
-                    {edit ?
-                    <>
-                        <Form onSubmit={handleSubmit}>
-                            <Row>
-                                <Form.Group as={Col} sm="4">
-                                        <Form.Control type="text" onChange={e => setNewTicker(e.target.value)}/>
-                                </Form.Group>
-                                <Col sm="2">
-                                        <Button type="submit" variant="light">Search</Button>
-                                    </Col>
-                                    <Col sm="2">
-                                        <Button variant="danger" onClick={cancelSearch}>Cancel</Button>
-                                </Col>
-                            </Row>
-                        </Form>
-                    </>
-                    :
-                    <>
-                        {props.ticker}<Button variant="link" onClick={onClick}><AiOutlineEdit /></Button>
-                    </>}
-                </Card.Title>
+                <Card.Title className="text-uppercase font-weight-bold">{props.ticker}<Button onClick={onClick()}><AiOutlineEdit /></Button></Card.Title>
                 {
-                    (props.info.bid && props.info.ask && props.news != "No data found") ?
+                    props.info ?
                     <Card.Text>
                         <Table>
                             <tr>
@@ -85,7 +51,7 @@ const StockInfoComponent = (props: IProps) => {
                         </Table>
                     </Card.Text>
                     :
-                    <Alert variant="warning">No Stock Information Found!</Alert>
+                    null
                 }
                 
             </Card.Body>
