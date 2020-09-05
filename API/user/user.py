@@ -70,6 +70,8 @@ def getUserByID(email):
 def createProfile():
     data = request.get_json()
     email = data['email']
+    password=data['password']
+    password=hashlib.md5(password.encode())
     
     if (User.query.filter_by(email=email).first()):
         return jsonify({"message": "Email '{}' already exists.".format(email)}), 400

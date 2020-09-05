@@ -1,14 +1,19 @@
 from flask import Flask, request, render_template , jsonify
 from yahooquery import Ticker
+import requests
+import json
 
 app = Flask(__name__)
 
 @app.route("/getstock")
 def get_stock():
-    stock=request.args.get('symbol',default="GOOG")
-    ticker=Ticker(stock)
-    data= ticker.summary_detail
-    news= ticker.news(5)
+    # stock=request.args.get('symbol',default="GOOG")
+    req = requests.get('http://127.0.0.1:7090/portfolio/tickers')
+    symbols = json.loads(req.content)["tickers"]
+
+    ticker = Ticker(symbols)
+    data = ticker.summary_detail
+    news = ticker.news(5)
     return jsonify(data,news)
 
 @app.route("/stockhistory")
