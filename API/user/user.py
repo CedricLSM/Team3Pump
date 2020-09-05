@@ -2,12 +2,13 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from os import environ
+from passlib.hash import sha256_crypt
 
 app = Flask(__name__)
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:@localhost:3306/user'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/user'
 
 db = SQLAlchemy(app)
 CORS(app)
@@ -42,11 +43,15 @@ def authenticate():
     data = request.get_json()
     email = data['email']
     password = data['password']
-    user = User.query.filter_by(email=email, password=password).first()
+
+    user = User.query.filter_by(email=email).first()
     
     if user:
-        email = user.email
-        return jsonify({"email":email}), 201
+        check_password = sha256_crypt.verify(password, user.password)
+        if check_password:
+            email = user.email
+            return jsonify({"email":email}), 201
+
     return jsonify({"message": "Invalid email or password."}), 404
 
 @app.route("/profile/<string:email>")
@@ -70,6 +75,8 @@ def createProfile():
         return jsonify({"message": "Email '{}' already exists.".format(email)}), 400
 
     user = User(**data)
+    user.password = sha256_crypt.encrypt(user.password)
+
     try:
         db.session.add(user)
         db.session.commit()
