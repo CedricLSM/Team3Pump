@@ -10,7 +10,7 @@ export class AccountsService {
     }
 
     login = async (email: string, password: string) : Promise<AccountDto | void> => {
-        return axios.post(`${this.endpoint}/login`, {'username': email, 'password': password})
+        return axios.post(`${this.endpoint}/login`, {'email': email, 'password': password})
         .then(
             (r) => {
                 if (r.status == 201) {
