@@ -1,23 +1,33 @@
 import AccountDto from "../shared/dto/AccountDto";
+import axios from "axios";
 
 export class AccountsService {
 
-    private email: string
+    private endpoint: string
     private password: string
 
     constructor() {
-        this.email = 'testtest1@test.com'
-        this.password = 'testtest1@test.com'
+        this.endpoint = 'http://localhost:5000'
     }
 
-    login = async (email: string, password: string) : Promise<AccountDto> => {
-        if (email === this.email && password === this.password) {
-            return {email: email}
-        }
+    login = async (email: string, password: string) : Promise<AccountDto | void> => {
+        return axios.post(`${this.endpoint}/login`, {'username': email, 'password': password}).then(
+            (r) => {
+                if (r.status == 201) {
+                    return {'email': email};
+                }
+            }
+        )
     }
 
-    signup = async (email: string, password: string) : Promise<AccountDto> => {
-        return {email: email}
+    signup = async (email: string, password: string) : Promise<AccountDto | void> => {
+        axios.post(`${this.endpoint}/signup`, {'username': email, 'password': password}).then(
+            (r) => {
+                if (r.status == 201) {
+                    return {'email': email};
+                }
+            }
+        )
     }
 }
 
