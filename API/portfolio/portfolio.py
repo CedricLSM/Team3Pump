@@ -96,4 +96,4 @@ def add_portfolio():
     return jsonify(portfolio.json()), 201
 
 if __name__ == '__main__': #this allows us to run flask app without explicitly using python -m flask run. Can just run python filename.py in terminal
-    app.run(host='0.0.0.0',port=7090,debug=True) #need to use differen port for each microservice. By default, it is 5000. Project need to use diff port no.s
+    app.run(host='0.0.0.0',port=8300,debug=True) #need to use differen port for each microservice. By default, it is 5000. Project need to use diff port no.s

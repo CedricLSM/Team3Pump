@@ -125,7 +125,7 @@ def getCredits(email):
     return jsonify({"message": "Error in retrieving credits."}), 404
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=8500, debug=True)
 
 # by default port is 5000 for flask
 # debug = true will display all the error messages,
