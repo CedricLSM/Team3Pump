@@ -6,7 +6,7 @@ export class AccountsService {
     private endpoint: string
 
     constructor() {
-        this.endpoint = 'http://localhost:5000'
+        this.endpoint = 'http://localhost:8500'
     }
 
     login = async (email: string, password: string) : Promise<AccountDto | void> => {
