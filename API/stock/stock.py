@@ -33,7 +33,7 @@ def get_multiple_stock():
 def get_stock_history():
 	stockticker = request.args.get('symbol', default="AAPL")
 	period = request.args.get('period', default="1y")
-	interval = request.args.get('interval', default="1mo")
+	interval = request.args.get('interval', default="1wk")
 	quote = Ticker(stockticker)	
 	hist = quote.history(period=period, interval=interval)
 	data = hist.to_json()
