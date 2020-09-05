@@ -5,13 +5,26 @@ import json
 
 app = Flask(__name__)
 
-@app.route("/getstock")
-def get_stock():
-    stock=request.args.get('symbol',default="GOOG")
+@app.route("/getstock/<string:stockName>")
+def get_stock(stockName):
+    # stock=request.args.get(stockName)
     # req = requests.get('http://127.0.0.1:7090/portfolio/tickers')
     # symbols = json.loads(req.content)["tickers"]
 
-    ticker = Ticker(stock)
+    ticker = Ticker(stockName)
+    data = ticker.summary_detail
+    news = ticker.news(5)
+    return jsonify(data,news)
+
+@app.route("/getMultipleStock/")
+def get_multiple_stock():
+    # stock=request.args.get('symbol',default="GOOG")
+	"""
+	Input example: {"Stocks":["GOOG","MSFT"]}
+	news input int -> needs to be changed
+	"""
+    data = request.get_json()
+    ticker = Ticker(data["stocks"])
     data = ticker.summary_detail
     news = ticker.news(5)
     return jsonify(data,news)
