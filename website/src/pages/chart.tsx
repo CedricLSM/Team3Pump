@@ -4,7 +4,7 @@ import styles from './login.module.scss';
 import dynamic from 'next/dynamic'
 
 const StockChartComponent = dynamic(() =>
-  import('../components/chart/StockChartComponent'),
+  import('../components/stock/StockChartComponent'),
   {ssr: false}
 )
 
