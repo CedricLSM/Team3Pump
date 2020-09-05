@@ -20,6 +20,10 @@ SET time_zone = "+00:00";
 -- Table structure for table `user`
 --
 
+CREATE DATABASE IF NOT EXISTS user DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE user;
+
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `email` varchar(30) NOT NULL,
   `password` varchar(512) NOT NULL,

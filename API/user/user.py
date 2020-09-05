@@ -116,13 +116,13 @@ def createProfile():
 #         return jsonify({"email": email})
 #     return jsonify({"message": "Email not found."}), 404
 
-# @app.route("/credits/<string:email>")
-# def getCredits(email):
-#     user = User.query.filter_by(email=email).first()
-#     if user:
-#         credits = user.credits
-#         return jsonify({"credits": credits})
-#     return jsonify({"message": "Error in retrieving credits."}), 404
+@app.route("/credits/<string:email>")
+def getCredits(email):
+    user = User.query.filter_by(email=email).first()
+    if user:
+        credits = user.credits
+        return jsonify({"credits": credits})
+    return jsonify({"message": "Error in retrieving credits."}), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

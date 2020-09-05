@@ -17,7 +17,7 @@ CORS(app)
 class Portfolio(db.Model):
     __tablename__ = 'portfolio'
 
-    username = db.Column(db.String(20), primary_key=True)
+    email = db.Column(db.String(20), primary_key=True)
     stock_ticker = db.Column(db.String(10), primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
     date_time = db.Column(db.DateTime, primary_key=True)
@@ -26,8 +26,8 @@ class Portfolio(db.Model):
     # to indicate whether it is a buy/sell, buy=1 and sell=0
 
 
-    def __init__(self, username, stock_ticker, quantity, date_time, price, buy):
-        self.username = username
+    def __init__(self, email, stock_ticker, quantity, date_time, price, buy):
+        self.email = email
         self.stock_ticker = stock_ticker
         self.quantity = quantity
         self.date_time = date_time
@@ -35,7 +35,7 @@ class Portfolio(db.Model):
         self.buy = buy
         
     def json(self):
-        return {"username": self.username, "stock_ticker": self.stock_ticker, "quantity": self.quantity,
+        return {"email": self.email, "stock_ticker": self.stock_ticker, "quantity": self.quantity,
         "date_time": self.date_time, "price": self.price, "buy": self.buy}
 
 '''
@@ -51,16 +51,16 @@ def get_portfolio_tickers():
     stockSymbols = [portfolio.stock_ticker for portfolio in Portfolio.query.all()]
     return {"tickers":stockSymbols}
 
-@app.route("/portfolio/username/<string:username>")
-def get_portfolio_by_username(username):
-    portfolio = {"portfolio": [portfolio.json() for portfolio in Portfolio.query.filter_by(username=username).all()]}
+@app.route("/portfolio/email/<string:email>")
+def get_portfolio_by_email(email):
+    portfolio = {"portfolio": [portfolio.json() for portfolio in Portfolio.query.filter_by(email=email).all()]}
     if portfolio:
         return jsonify(portfolio)
     return jsonify({"message": "No stocks found."}), 404
 
-@app.route("/currentHoldings/<string:username>")
-def get_current_holdings(username):
-    portfolio = [portfolio.json() for portfolio in Portfolio.query.filter_by(username=username).all()]
+@app.route("/currentHoldings/<string:email>")
+def get_current_holdings(email):
+    portfolio = [portfolio.json() for portfolio in Portfolio.query.filter_by(email=email).all()]
     di = collections.defaultdict(int)
 
     for stocks in portfolio:
@@ -75,9 +75,9 @@ def get_current_holdings(username):
         return jsonify(di)
     return jsonify({"message": "No stocks found."}), 404
 
-@app.route("/portfolio/<string:username>/<string:stock_ticker>")
-def get_portfolio_by_stock(username, stock_ticker):
-    portfolio = {"portfolio": [portfolio.json() for portfolio in Portfolio.query.filter_by(username=username, stock_ticker=stock_ticker).all()]}
+@app.route("/portfolio/<string:email>/<string:stock_ticker>")
+def get_portfolio_by_stock(email, stock_ticker):
+    portfolio = {"portfolio": [portfolio.json() for portfolio in Portfolio.query.filter_by(email=email, stock_ticker=stock_ticker).all()]}
     if portfolio:
         return jsonify(portfolio)
     return jsonify({"message": "No stocks found."}), 404
@@ -97,4 +97,3 @@ def add_portfolio():
 
 if __name__ == '__main__': #this allows us to run flask app without explicitly using python -m flask run. Can just run python filename.py in terminal
     app.run(host='0.0.0.0',port=7090,debug=True) #need to use differen port for each microservice. By default, it is 5000. Project need to use diff port no.s
-    
