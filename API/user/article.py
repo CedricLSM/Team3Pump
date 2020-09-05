@@ -24,8 +24,7 @@ class Article(db.Model):
     updated_at = db.Column(db.Date, nullable=True)
 
     def __init__(self,articleName,articleDescription,articleBody,created_at):
-        # self.articleId =articleId
-        self.articleName =articleName
+        self.articleName = articleName
         self.articleDescription = articleDescription
         self.articleBody = articleBody
         self.created_at =created_at
