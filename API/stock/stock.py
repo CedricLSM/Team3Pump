@@ -7,11 +7,11 @@ app = Flask(__name__)
 
 @app.route("/getstock")
 def get_stock():
-    # stock=request.args.get('symbol',default="GOOG")
-    req = requests.get('http://127.0.0.1:7090/portfolio/tickers')
-    symbols = json.loads(req.content)["tickers"]
+    stock=request.args.get('symbol',default="GOOG")
+    # req = requests.get('http://127.0.0.1:7090/portfolio/tickers')
+    # symbols = json.loads(req.content)["tickers"]
 
-    ticker = Ticker(symbols)
+    ticker = Ticker(stock)
     data = ticker.summary_detail
     news = ticker.news(5)
     return jsonify(data,news)
