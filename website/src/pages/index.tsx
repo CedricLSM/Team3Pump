@@ -14,19 +14,13 @@ interface IProps {
 export const getServerSideProps: GetServerSideProps<IProps> = async (context) => {
   const { query, req, res } = context
 
-  console.log(req.headers.cookie);
-
-
-
   let props: any
 
   props = {
   }
 
-  if (!req.headers.cookie || !parse(req.headers.cookie).email) {
-    props.redirect = '/login'
-  } else {
-    "no redirect";
+  if (!req.headers.cookie || !parse(req.headers.cookie).userId) {
+    props.redirect = '/login';
   }
   
   // deletes undefined items in props
