@@ -47,7 +47,6 @@ const StockInfoComponent = (props: IProps) => {
                 price: props.info.ask,
                 buy: true
             }).then((r) => {
-                console.log(r);
                 handleShow();
                 axios.get('/api/accounts/credits')
                     .then((r) => {props.setCredits(r.data)})

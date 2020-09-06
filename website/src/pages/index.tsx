@@ -52,7 +52,6 @@ const Home: NextComponentType<NextPageContext, any, IProps> = (props: IProps) =>
     }
   }, [])
 
-  console.log(props);
 
 	return (
 		<>
