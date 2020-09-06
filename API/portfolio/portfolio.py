@@ -129,11 +129,16 @@ def add_portfolio():
         # check user's portfolio
         stock_ticker = portfolio.stock_ticker
         user_portfolio = get_portfolio_by_stock(email, stock_ticker)
+
         if user_portfolio:
             # can only sell the max quantity he has.
             quantity_avail = 0
             for p in user_portfolio['portfolio']:
-                quantity_avail += p['quantity']
+                if p['buy']:
+                    quantity_avail += p['quantity']
+                else:
+                    quantity_avail -= p['quantity']
+
             if portfolio.quantity > quantity_avail:
                 return jsonify({"message": "Insufficient stocks."}), 404
             try:
