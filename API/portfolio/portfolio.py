@@ -78,6 +78,8 @@ def get_current_holdings(email):
             qty = stocks["quantity"]
             oldQty = di[stocks["stock_ticker"]][0]
             oldPrice = di[stocks["stock_ticker"]][1]
+            if oldQty - qty <= 0:
+                return jsonify({"message": "No stocks found."}), 404
 
             di[stocks["stock_ticker"]][0] -= qty
             di[stocks["stock_ticker"]][1] -= qty*(oldPrice/oldQty)
