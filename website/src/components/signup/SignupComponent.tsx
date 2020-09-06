@@ -35,11 +35,8 @@ const SignupComponent = (props: IProps) => {
             telegramId: teleId
         }
 
-        console.log(signupData);
-
         axios.post(signupEndpoint, signupData).then(res => {
             //redirect -> call callback function to handleLoginSuccess
-            console.log(res.data);
             if (res.data.email) {
                 props.handleSuccessSignup();
             }
