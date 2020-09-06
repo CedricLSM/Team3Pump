@@ -59,6 +59,11 @@ const StockInfoComponent = (props: IProps) => {
         handleShow();
     })
 
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      });
+
     return (
         <>
         <Card>
@@ -94,8 +99,8 @@ const StockInfoComponent = (props: IProps) => {
                                 <td>Bid Price ({props.info.currency}):</td>
                             </tr>
                             <tr>
-                                <td>{props.info.ask.toFixed(2)}</td>
-                                <td>{props.info.bid.toFixed(2)}</td>
+                                <td>{formatter.format(props.info.ask)}</td>
+                                <td>{formatter.format(props.info.bid)}</td>
                             </tr>
                             <tr>
                                 <td colSpan={2}> 

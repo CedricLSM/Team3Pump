@@ -6,6 +6,11 @@ interface IProps {
 }
 
 const PortfolioTableComponent = (props: IProps) => {
+    
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      });
 
     return (
         <Table striped bordered hover>
@@ -13,16 +18,14 @@ const PortfolioTableComponent = (props: IProps) => {
                 <th>Stock</th>
                 <th>Quantity</th>
                 <th>Total Cost</th>
-                <th>Profit / Loss</th>
             </tr>
             {
                 props.holdings ? 
                 Object.keys(props.holdings).map((ticker) => {
                     return <tr>
                         <td>{ticker}</td>
-                        <td>{props.holdings[ticker]}</td>
-                        <td>Price</td>
-                        <td>Profit/Loss</td>
+                        <td>{props.holdings[ticker][0]}</td>
+                        <td>{formatter.format(props.holdings[ticker][1])}</td>
                     </tr>
                 })
                 :
