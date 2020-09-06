@@ -78,6 +78,8 @@ def get_current_holdings(email):
             qty = stocks["quantity"]
             oldQty = di[stocks["stock_ticker"]][0]
             oldPrice = di[stocks["stock_ticker"]][1]
+            if oldQty - qty <= 0:
+                return jsonify({"message": "No stocks found."}), 404
 
             di[stocks["stock_ticker"]][0] -= qty
             di[stocks["stock_ticker"]][1] -= qty*(oldPrice/oldQty)
@@ -102,7 +104,7 @@ def add_portfolio():
     portfolio = Portfolio(**data)
     email = portfolio.email
     
-    userResponse = requests.get('http://0.0.0.0:8500/credits/' + email)
+    userResponse = requests.get('http://localhost:8500/credits/' + email)
     if userResponse.status_code == 404:
         return jsonify({"message": "User not found."}), 404
     
@@ -118,7 +120,7 @@ def add_portfolio():
                 return jsonify({"message": "An error occurred adding the stock."}), 500
 
             # modify user's credits (qty x price)
-            user_modifycredits = requests.put('http://0.0.0.0:8500/credits/' + email + '/' + str(transacted_credits) + '/' + '1')
+            user_modifycredits = requests.put('http://localhost:8500/credits/' + email + '/' + str(transacted_credits) + '/' + '1')
             if user_modifycredits.status_code == 404:
                 return jsonify({"message": "User not found."}), 404
 
@@ -129,11 +131,16 @@ def add_portfolio():
         # check user's portfolio
         stock_ticker = portfolio.stock_ticker
         user_portfolio = get_portfolio_by_stock(email, stock_ticker)
+
         if user_portfolio:
             # can only sell the max quantity he has.
             quantity_avail = 0
             for p in user_portfolio['portfolio']:
-                quantity_avail += p['quantity']
+                if p['buy']:
+                    quantity_avail += p['quantity']
+                else:
+                    quantity_avail -= p['quantity']
+
             if portfolio.quantity > quantity_avail:
                 return jsonify({"message": "Insufficient stocks."}), 404
             try:
@@ -143,7 +150,7 @@ def add_portfolio():
                 return jsonify({"message": "An error occurred selling the stock."}), 500
             
             # modify user's credits
-            user_modifycredits = requests.put('http://0.0.0.0:8500/credits/' + email + '/' + str(transacted_credits) + '/' + '0')
+            user_modifycredits = requests.put('http://localhost:8500/credits/' + email + '/' + str(transacted_credits) + '/' + '0')
             if user_modifycredits.status_code == 404:
                 return jsonify({"message": "User not found."}), 404
             return jsonify(portfolio.json()), 201
