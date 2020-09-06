@@ -29,8 +29,6 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
 
 const Learn: NextComponentType<NextPageContext, any, IProps> = (props: IProps) => {
 
-    console.log(props);
-
     return (
         <div className="container">
             <DefaultLayout>

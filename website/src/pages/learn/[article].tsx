@@ -14,8 +14,6 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
     const articleId = query.article as string;
     
     const result = await ArticleService.getArticle(parseInt(articleId));
-
-    console.log(result);
     
     let props: any
   
@@ -31,11 +29,6 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
     return {props: props}
   }
 const Learn: NextComponentType<NextPageContext, any, IProps> = (props: IProps) => {
-
-    console.log(props);
-    console.log(props.article);
-
-    // const article = props.article['article'];
 
     return (
         <DefaultLayout>
