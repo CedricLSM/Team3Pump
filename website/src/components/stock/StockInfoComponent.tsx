@@ -17,6 +17,7 @@ const StockInfoComponent = (props: IProps) => {
     const [newTicker, setNewTicker] = useState<string>("AAPL");
     const [quantity, setQuantity] = useState<number>(0);
     const [show, setShow] = useState(false);
+    const [transactionSuccess, setTransactionSuccess] = useState(true);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -43,8 +44,14 @@ const StockInfoComponent = (props: IProps) => {
                 quantity: quantity,
                 price: props.info.ask,
                 buy: true
+            }).then((r) => {
+                console.log(r);
+                handleShow();
+            }).catch((err) => {
+                setTransactionSuccess(false);
+                handleShow();
             })
-        handleShow();
+        
     })
 
     const handleSell = (() => {
@@ -53,10 +60,16 @@ const StockInfoComponent = (props: IProps) => {
             {
                 ticker: newTicker,
                 quantity: quantity,
-                price: props.info.ask,
+                price: props.info.bid,
                 buy: false
+            }).then((r) => {
+                setTransactionSuccess(true);
+                handleShow();
+            }).catch((err) => {
+                setTransactionSuccess(false);
+                handleShow();
             })
-        handleShow();
+        
     })
 
     const formatter = new Intl.NumberFormat('en-US', {
@@ -134,7 +147,7 @@ const StockInfoComponent = (props: IProps) => {
             </Card.Body>
         </Card>
         <Modal show={show} onHide={handleClose}>
-            <Modal.Body>Transaction Added Successfully</Modal.Body>
+            <Modal.Body>{transactionSuccess ? "Transaction Added Successfully" : "Insufficient Stock / Credits!"}</Modal.Body>
                 <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                     Close

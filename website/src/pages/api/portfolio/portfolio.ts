@@ -16,7 +16,7 @@ handler.post((req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
             if (r) {
                 res.json(r);
             } else {
-                res.end();
+                res.status(404).end();
             }
         }, next)
 
