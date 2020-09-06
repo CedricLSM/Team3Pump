@@ -127,7 +127,7 @@ def getCredits(email):
 @app.route("/credits/<string:email>/<string:credits>/<string:buysell>", methods=['PUT'])
 def modifyCredits(email, credits, buysell):
     user = User.query.filter_by(email=email).first()
-    credits = int(credits)
+    credits = float(credits)
     if user:
         if buysell == '1':
             user.credits -= credits
