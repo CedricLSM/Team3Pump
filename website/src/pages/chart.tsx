@@ -9,7 +9,7 @@ const StockChartComponent = dynamic(() =>
 )
 
 
-const login: NextComponentType<NextPageContext, any> = () => {
+const Chart: NextComponentType<NextPageContext, any> = () => {
 
     return (
         <div className={styles.container}>
@@ -18,4 +18,4 @@ const login: NextComponentType<NextPageContext, any> = () => {
     );
 }
 
-export default login;
+export default Chart;

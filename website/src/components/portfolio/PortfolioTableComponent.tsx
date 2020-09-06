@@ -8,7 +8,7 @@ interface IProps {
 const PortfolioTableComponent = (props: IProps) => {
 
     return (
-        <Table>
+        <Table striped bordered hover>
             <tr>
                 <th>Stock</th>
                 <th>Quantity</th>

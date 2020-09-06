@@ -28,7 +28,9 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
   }
   const email = parse(req.headers.cookie).userId;
   const holdings = await PortfolioService.getCurrentHoldings(email)
-    .then((r) => {return r});
+    .then((r) => {
+      return r
+    });
 
   // const netHoldings = {};
 
@@ -50,7 +52,7 @@ const Home: NextComponentType<NextPageContext, any, IProps> = (props: IProps) =>
     }
   }, [])
 
-  console.log(props.holdings);
+  console.log(props);
 
 	return (
 		<>
