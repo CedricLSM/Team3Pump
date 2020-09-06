@@ -9,7 +9,7 @@ export class StockService {
     }
 
     getStockInfo = async (ticker: string) : Promise<any> => {
-        return axios.get(`${this.endpoint}/getstock`, {params: {symbol: ticker}})
+        return axios.get(`${this.endpoint}/getstock/${ticker}`)
         .then(
             (r) => {
                 return r.data;
@@ -18,7 +18,7 @@ export class StockService {
     }
 
     getStockHistory = async (ticker: string) : Promise<any> => {
-        return axios.get(`${this.endpoint}/stockhistory`, {params: {symbol: ticker}})
+        return axios.get(`${this.endpoint}/stockhistory/${ticker}`)
         .then(
             (r) => {
                 return r.data;
