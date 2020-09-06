@@ -5,8 +5,10 @@ import { AiOutlineEdit } from "react-icons/ai";
 import axios from 'axios';
 
 interface IProps {
+    credits: number,
+    setCredits: (credits: number) => void,
     ticker: string,
-    setTicker: any;
+    setTicker: (ticker: string) => void,
     info?: any,
     news?: any
 }
@@ -47,6 +49,8 @@ const StockInfoComponent = (props: IProps) => {
             }).then((r) => {
                 console.log(r);
                 handleShow();
+                axios.get('/api/accounts/credits')
+                    .then((r) => {props.setCredits(r.data)})
             }).catch((err) => {
                 setTransactionSuccess(false);
                 handleShow();
@@ -79,6 +83,11 @@ const StockInfoComponent = (props: IProps) => {
 
     return (
         <>
+        <Card className="mb-1">
+            <Card.Title className="text-uppercase font-weight-bold">
+                Buying Power: {formatter.format(props.credits)}
+            </Card.Title>
+        </Card>
         <Card>
             <Card.Body>
                 <Card.Title className="text-uppercase font-weight-bold">
