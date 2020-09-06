@@ -31,7 +31,7 @@ CREATE TABLE `article` (
     `created_at` DATE NOT NULL,
     `updated_at` DATE,
     PRIMARY KEY (`articleId`)
-); ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `portfolio`
