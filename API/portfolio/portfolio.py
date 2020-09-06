@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from os import environ
 import collections 
+import requests
+import json
 
 app = Flask(__name__)
 
@@ -79,21 +81,63 @@ def get_current_holdings(email):
 def get_portfolio_by_stock(email, stock_ticker):
     portfolio = {"portfolio": [portfolio.json() for portfolio in Portfolio.query.filter_by(email=email, stock_ticker=stock_ticker).all()]}
     if portfolio:
-        return jsonify(portfolio)
+        return portfolio
     return jsonify({"message": "No stocks found."}), 404
 
 @app.route("/portfolio", methods=['POST'])
 def add_portfolio():
     data = request.get_json()
     portfolio = Portfolio(**data)
+    email = portfolio.email
+    
+    userResponse = requests.get('http://0.0.0.0:8500/credits/' + email)
+    if userResponse.status_code == 404:
+        return jsonify({"message": "User not found."}), 404
+    
+    credits = json.loads(userResponse.text)['credits']
+    transacted_credits = portfolio.price * portfolio.quantity
 
-    try:
-        db.session.add(portfolio)
-        db.session.commit()
-    except:
-        return jsonify({"message": "An error occurred adding the stock."}), 500
+    if portfolio.buy: #buy
+        if credits >= transacted_credits:
+            try:
+                db.session.add(portfolio)
+                db.session.commit()
+            except:
+                return jsonify({"message": "An error occurred adding the stock."}), 500
 
-    return jsonify(portfolio.json()), 201
+            # modify user's credits (qty x price)
+            user_modifycredits = requests.put('http://0.0.0.0:8500/credits/' + email + '/' + str(transacted_credits) + '/' + '1')
+            if user_modifycredits.status_code == 404:
+                return jsonify({"message": "User not found."}), 404
+
+            return jsonify(portfolio.json()), 201
+        return jsonify({"message": "Insufficient credits."}), 404
+
+    else: #sell
+        # check user's portfolio
+        stock_ticker = portfolio.stock_ticker
+        user_portfolio = get_portfolio_by_stock(email, stock_ticker)
+        if user_portfolio:
+            # can only sell the max quantity he has.
+            quantity_avail = 0
+            for p in user_portfolio['portfolio']:
+                quantity_avail += p['quantity']
+            if portfolio.quantity > quantity_avail:
+                return jsonify({"message": "Insufficient stocks."}), 404
+            try:
+                db.session.add(portfolio)
+                db.session.commit()
+            except:
+                return jsonify({"message": "An error occurred selling the stock."}), 500
+            
+            # modify user's credits
+            user_modifycredits = requests.put('http://0.0.0.0:8500/credits/' + email + '/' + str(transacted_credits) + '/' + '0')
+            if user_modifycredits.status_code == 404:
+                return jsonify({"message": "User not found."}), 404
+            return jsonify(portfolio.json()), 201
+
+        else:
+            return jsonify({"message": "Insufficient stocks."}), 404
 
 if __name__ == '__main__': #this allows us to run flask app without explicitly using python -m flask run. Can just run python filename.py in terminal
     app.run(host='0.0.0.0',port=8300,debug=True) #need to use differen port for each microservice. By default, it is 5000. Project need to use diff port no.s

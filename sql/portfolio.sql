@@ -31,7 +31,7 @@ CREATE TABLE `portfolio` (
     `price` FLOAT NOT NULL,
     `buy` BOOLEAN  NOT NULL,
     PRIMARY KEY (`email`, `stock_ticker`, `date_time`)
-); ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `portfolio`
