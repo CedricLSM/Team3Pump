@@ -29,16 +29,20 @@ def get_multiple_stock():
     news = ticker.news(5)
     return jsonify(data,news)
 
-@app.route("/stockhistory")
-def get_stock_history():
+@app.route("/stockhistory/<string:ticker>/<string:period>/<string:interval>")
+def get_stock_history(ticker, period, interval):
     """
     Input example: {"stocks":["GOOG","MSFT"], "period":"1y", "interval":"1wk"}
     """
-    tmp = request.get_json()
-    ticker = Ticker(tmp["stocks"])
-    period = tmp["period"]
-    interval = tmp["interval"]
-    return ticker.history(period=period, interval=interval).to_json()
+    ticker = Ticker(ticker)
+    history = ticker.history(period=period, interval=interval)
+    dates = history.index.get_level_values(1).tolist()
+    close = history['close'].values.tolist()
+    open = history['open'].values.tolist()
+    high = history['high'].values.tolist()
+    low = history['low'].values.tolist()
+    result = {'dates': dates, "close": close, "open": open, "high": high, "low": low}
+    return jsonify(result)
 
     # stockticker = request.args.get('symbol', default="AAPL")
     # period = request.args.get('period', default="1y")
