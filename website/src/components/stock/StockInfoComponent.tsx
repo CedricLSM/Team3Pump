@@ -76,10 +76,10 @@ const StockInfoComponent = (props: IProps) => {
                                 <Form.Group as={Col} sm="4">
                                         <Form.Control type="text" onChange={e => setNewTicker(e.target.value)}/>
                                 </Form.Group>
-                                <Col sm="2">
+                                <Col sm="3">
                                         <Button type="submit" variant="outline-primary">Confirm</Button>
                                     </Col>
-                                    <Col sm="2">
+                                    <Col sm="3">
                                         <Button variant="outline-danger" onClick={cancelSearch}>Cancel</Button>
                                 </Col>
                             </Row>

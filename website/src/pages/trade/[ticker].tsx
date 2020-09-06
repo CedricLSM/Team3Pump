@@ -35,9 +35,8 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
   props = {
     ticker: ticker,
     result: result,
-
+    historicalPrice: histPrice
   }
-//   props.historicalPrice = JSON.parse(histPrice);  
 
   if (!req.headers.cookie || !parse(req.headers.cookie).userId) {
     props.redirect = '/login';
@@ -66,15 +65,15 @@ const Trade: NextComponentType<NextPageContext, any, IProps> = (props: IProps) =
   }, [])
 
   useEffect(() => {
-    console.log(ticker);
     axios.get('/api/stock/stock', {params: {ticker: ticker}})
         .then((r) => {
-            console.log(r);
             setNews(r.data[1])
             setInfo(r.data[0][ticker])
         })
-    // axios.get('/api/stock/stockhistory', {params: {symbol: ticker}})
-    //     .then((r) => setHistoricalPrice(r))
+    axios.get('/api/stock/stockhistory', {params: {ticker: ticker}})
+        .then((r) => {
+          setHistoricalPrice(r.data);
+          console.log(r)})
   }, [ticker])
 
 	return (
@@ -85,9 +84,11 @@ const Trade: NextComponentType<NextPageContext, any, IProps> = (props: IProps) =
         <DefaultLayout>
             <Row>
                 <Col xs={6}>
-                    {/* <StockChartComponent date={historicalPrice.date} open={historicalPrice.open} close={historicalPrice.close} high={historicalPrice.high} low={historicalPrice.low}/> */}
+                    <StockChartComponent ticker={ticker} date={historicalPrice.dates} open={historicalPrice.open} close={historicalPrice.close} high={historicalPrice.high} low={historicalPrice.low}/>
                 </Col>
-                <Col xs={6}>
+                <Col xs={1}>
+                </Col>
+                <Col xs={5} className="pl-2">
                     <StockInfoComponent ticker={ticker} info={info} news={news} setTicker={setTicker}/>
                 </Col>
             </Row>

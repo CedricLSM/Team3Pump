@@ -18,7 +18,8 @@ export class StockService {
     }
 
     getStockHistory = async (ticker: string) : Promise<any> => {
-        return axios.get(`${this.endpoint}/stockhistory/${ticker}`)
+        // const historyData = {"stocks":ticker, "period":"1y", "interval":"1wk"}
+        return axios.get(`${this.endpoint}/stockhistory/${ticker}/1y/1wk`)
         .then(
             (r) => {
                 return r.data;

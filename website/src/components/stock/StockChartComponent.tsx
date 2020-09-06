@@ -3,6 +3,7 @@ import Plot from 'react-plotly.js';
 import React from 'react';
 
 interface IProps {
+  ticker: string,
   date: Date[],
   close: number[],
   open: number[],
@@ -24,7 +25,7 @@ const StockChartComponent = (props: IProps) => {
               type: 'candlestick'
             }
           ]}
-          layout={{width: 320, height: 240, title: 'Sample Plot'}}
+          // layout={{width: 320, height: 240, title: `${props.ticker} price`}}
         />
       );
 }
