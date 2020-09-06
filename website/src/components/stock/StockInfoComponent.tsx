@@ -1,6 +1,6 @@
 
 import React, { useState, MouseEvent, FormEvent } from 'react';
-import { Card, Table, Button, Form, Row, Col, Alert } from 'react-bootstrap';
+import { Card, Table, Button, Form, Row, Col, Alert, Modal } from 'react-bootstrap';
 import { AiOutlineEdit } from "react-icons/ai";
 import axios from 'axios';
 
@@ -16,6 +16,10 @@ const StockInfoComponent = (props: IProps) => {
     const [edit, setEdit] = useState<boolean>(false);
     const [newTicker, setNewTicker] = useState<string>("AAPL");
     const [quantity, setQuantity] = useState<number>(0);
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     
     const onClick = () => {
         setEdit(true);
@@ -40,6 +44,7 @@ const StockInfoComponent = (props: IProps) => {
                 price: props.info.ask,
                 buy: true
             })
+        handleShow();
     })
 
     const handleSell = (() => {
@@ -51,9 +56,11 @@ const StockInfoComponent = (props: IProps) => {
                 price: props.info.ask,
                 buy: false
             })
+        handleShow();
     })
 
     return (
+        <>
         <Card>
             <Card.Body>
                 <Card.Title className="text-uppercase font-weight-bold">
@@ -121,6 +128,15 @@ const StockInfoComponent = (props: IProps) => {
                 
             </Card.Body>
         </Card>
+        <Modal show={show} onHide={handleClose}>
+            <Modal.Body>Transaction Added Successfully</Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                    Close
+                </Button>
+            </Modal.Footer>
+        </Modal>
+        </>
       );
 }
 
