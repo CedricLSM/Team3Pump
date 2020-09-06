@@ -31,13 +31,22 @@ def get_multiple_stock():
 
 @app.route("/stockhistory")
 def get_stock_history():
-    stockticker = request.args.get('symbol', default="AAPL")
-    period = request.args.get('period', default="1y")
-    interval = request.args.get('interval', default="1wk")
-    quote = Ticker(stockticker)    
-    hist = quote.history(period=period, interval=interval)
-    data = hist.to_json()
-    return data
+    """
+    Input example: {"stocks":["GOOG","MSFT"], "period":"1y", "interval":"1wk"}
+    """
+    tmp = request.get_json()
+    ticker = Ticker(tmp["stocks"])
+    period = tmp["period"]
+    interval = tmp["interval"]
+    return ticker.history(period=period, interval=interval).to_json()
+
+    # stockticker = request.args.get('symbol', default="AAPL")
+    # period = request.args.get('period', default="1y")
+    # interval = request.args.get('interval', default="1wk")
+    # quote = Ticker(stockticker)    
+    # hist = quote.history(period=period, interval=interval)
+    # data = hist.to_json()
+    # return data
 
 # @app.route("/")
 # def home():
