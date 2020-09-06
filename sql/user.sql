@@ -30,7 +30,7 @@ CREATE TABLE `user` (
   `name` varchar(30) NOT NULL,
   `risk_profile` int(11) NOT NULL,
   `telegram_id` varchar(20) DEFAULT NULL,
-  `credits` int(11) NOT NULL
+  `credits` float(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
