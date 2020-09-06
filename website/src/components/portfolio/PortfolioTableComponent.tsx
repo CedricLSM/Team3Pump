@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Table } from 'react-bootstrap';
 
+interface IProps {
+    holdings?: any
+}
 
-const PortfolioTableComponent = () => {
+const PortfolioTableComponent = (props: IProps) => {
 
     return (
         <Table>
@@ -12,12 +15,19 @@ const PortfolioTableComponent = () => {
                 <th>Total Cost</th>
                 <th>Profit / Loss</th>
             </tr>
-            <tr>
-                <td>TSLA</td>
-                <td>100</td>
-                <td>30000</td>
-                <td>-100</td>
-            </tr>
+            {
+                props.holdings ? 
+                Object.keys(props.holdings).map((ticker) => {
+                    return <tr>
+                        <td>{ticker}</td>
+                        <td>{props.holdings[ticker]}</td>
+                        <td>Price</td>
+                        <td>Profit/Loss</td>
+                    </tr>
+                })
+                :
+                null
+            }
         </Table>
     );
 }
