@@ -77,10 +77,10 @@ const StockInfoComponent = (props: IProps) => {
                                         <Form.Control type="text" onChange={e => setNewTicker(e.target.value)}/>
                                 </Form.Group>
                                 <Col sm="2">
-                                        <Button type="submit" variant="light">Search</Button>
+                                        <Button type="submit" variant="outline-primary">Confirm</Button>
                                     </Col>
                                     <Col sm="2">
-                                        <Button variant="danger" onClick={cancelSearch}>Cancel</Button>
+                                        <Button variant="outline-danger" onClick={cancelSearch}>Cancel</Button>
                                 </Col>
                             </Row>
                         </Form>
@@ -106,14 +106,14 @@ const StockInfoComponent = (props: IProps) => {
                                 <td colSpan={2}> 
                                     <Form>
                                         <Form.Group>
-                                            <Form.Control type="number" onChange={e => setQuantity(e.target.value)} placeholder="Quantity"/>
+                                            <Form.Control type="number" onChange={e => setQuantity(parseInt(e.target.value))} placeholder="Quantity"/>
                                         </Form.Group>
                                     </Form>
                                 </td>
                             </tr>
                             <tr>
                                 <td><Button variant="primary" block onClick={handleBuy}>Buy</Button></td>
-                                <td><Button block onClick={handleSell}>Sell</Button></td>
+                                <td><Button variant="outline-danger" block onClick={handleSell}>Sell</Button></td>
                             </tr>
                         </Table>
                         <Table>
@@ -122,7 +122,7 @@ const StockInfoComponent = (props: IProps) => {
                             </tr>
                             {props.news.map((newsItem) => {
                                 return <tr>
-                                    <td><a href={newsItem.url}>{decodeURIComponent(newsItem.title)}</a></td>
+                                    <td><a href={newsItem.url} target="_blank">{decodeURIComponent(newsItem.title)}</a></td>
                                 </tr>
                             })}
                         </Table>
