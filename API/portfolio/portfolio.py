@@ -63,18 +63,32 @@ def get_portfolio_by_email(email):
 @app.route("/currentHoldings/<string:email>")
 def get_current_holdings(email):
     portfolio = [portfolio.json() for portfolio in Portfolio.query.filter_by(email=email).all()]
-    di = collections.defaultdict(int)
+    di = collections.defaultdict(list)
 
     for stocks in portfolio:
+        if not di[stocks["stock_ticker"]]:
+            di[stocks["stock_ticker"]] = [0,0]
         if stocks["buy"]:
-            di[stocks["stock_ticker"]] += stocks["quantity"]
+            qty = stocks["quantity"]
+            price = stocks["price"]
+            oldQty = di[stocks["stock_ticker"]][0]
+            oldPrice = di[stocks["stock_ticker"]][1]
+            di[stocks["stock_ticker"]][0] += qty
+            di[stocks["stock_ticker"]][1] = (qty*price + oldQty*oldPrice) / di[stocks["stock_ticker"]][0]
         else:
-            di[stocks["stock_ticker"]] -= stocks["quantity"]
-        if di[stocks["stock_ticker"]] <= 0:
+            qty = stocks["quantity"]
+            price = stocks["price"]
+            oldQty = di[stocks["stock_ticker"]][0]
+            oldPrice = di[stocks["stock_ticker"]][1]
+
+            di[stocks["stock_ticker"]][0] -= qty
+            di[stocks["stock_ticker"]][1] = (oldQty*oldPrice - qty*price ) / di[stocks["stock_ticker"]][0]
+            
+        if di[stocks["stock_ticker"]][0] <= 0:
             del di[stocks["stock_ticker"]]
 
     if di:
-        return jsonify(di)
+        return di
     return jsonify({"message": "No stocks found."}), 404
 
 @app.route("/portfolio/<string:email>/<string:stock_ticker>")
