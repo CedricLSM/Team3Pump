@@ -23,7 +23,7 @@ class User(db.Model):
     telegram_ID = db.Column(db.String(20), nullable=True)
     credits = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, email, password, name, risk_profile, telegram_ID = None, credits = 10000):
+    def __init__(self, email, password, name, risk_profile, telegram_ID = None, credits = 100000):
         self.email = email
         self.password = password
         self.name = name

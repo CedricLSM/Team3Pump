@@ -16,7 +16,6 @@ const login: NextComponentType<NextPageContext, any> = () => {
     }
 
     const navigateToSignUp = () => {
-        console.log('failure')
         router.push('/signup')
     }
 
