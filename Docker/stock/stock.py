@@ -19,29 +19,42 @@ def get_stock(stockName):
 @app.route("/getMultipleStock/")
 def get_multiple_stock():
     # stock=request.args.get('symbol',default="GOOG")
-	"""
-	Input example: {"Stocks":["GOOG","MSFT"]}
-	news input int -> needs to be changed
-	"""
+    """
+    Input example: {"Stocks":["GOOG","MSFT"]}
+    news input int -> needs to be changed
+    """
     data = request.get_json()
     ticker = Ticker(data["stocks"])
     data = ticker.summary_detail
     news = ticker.news(5)
     return jsonify(data,news)
 
-@app.route("/stockhistory")
-def get_stock_history():
-	stockticker = request.args.get('symbol', default="AAPL")
-	period = request.args.get('period', default="1y")
-	interval = request.args.get('interval', default="1mo")
-	quote = yf.Ticker(stockticker)	
-	hist = quote.history(period=period, interval=interval)
-	data = hist.to_json()
-	return data
+@app.route("/stockhistory/<string:ticker>/<string:period>/<string:interval>")
+def get_stock_history(ticker, period, interval):
+    """
+    Input example: {"stocks":["GOOG","MSFT"], "period":"1y", "interval":"1wk"}
+    """
+    ticker = Ticker(ticker)
+    history = ticker.history(period=period, interval=interval)
+    dates = history.index.get_level_values(1).tolist()
+    close = history['close'].values.tolist()
+    open = history['open'].values.tolist()
+    high = history['high'].values.tolist()
+    low = history['low'].values.tolist()
+    result = {'dates': dates, "close": close, "open": open, "high": high, "low": low}
+    return jsonify(result)
+
+    # stockticker = request.args.get('symbol', default="AAPL")
+    # period = request.args.get('period', default="1y")
+    # interval = request.args.get('interval', default="1wk")
+    # quote = Ticker(stockticker)    
+    # hist = quote.history(period=period, interval=interval)
+    # data = hist.to_json()
+    # return data
 
 # @app.route("/")
 # def home():
 #     return render_template("homepage.html")
 
 if __name__ == "__main__":
-	app.run(host='0.0.0.0', port=8400,debug=True)
+    app.run(host='0.0.0.0', port=8400,debug=True)

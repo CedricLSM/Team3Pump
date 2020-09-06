@@ -1,0 +1,19 @@
+Build
+------
+docker build -t fuoni/article:1.0.0 .
+docker build -t fuoni/news:1.0.0 .
+
+docker build -t fuoni/portfolio:1.0.0 .
+docker build -t fuoni/stock:1.0.0 .
+docker build -t fuoni/user:1.0.0 .
+
+
+
+Run
+------
+docker run -p 8100:8100 -e dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/ fuoni/article:1.0.0
+docker run -p 8200:8200 fuoni/news:1.0.0
+docker run -p 8300:8300 -e dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/ fuoni/portfolio:1.0.0
+docker run -p 8400:8400 fuoni/stock:1.0.0
+docker run -p 8500:8500 -e dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/ fuoni/user:1.0.0
+

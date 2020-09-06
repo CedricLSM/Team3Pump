@@ -5,9 +5,9 @@ from os import environ
 
 app = Flask(__name__)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/3pump'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/article'
 
 db = SQLAlchemy(app)
 CORS(app)
@@ -23,7 +23,8 @@ class Article(db.Model):
     created_at = db.Column(db.Date, nullable=False)
     updated_at = db.Column(db.Date, nullable=True)
 
-    def __init__(self,articleName,articleDescription,articleBody,created_at):
+    def __init__(self,articleId,articleName,articleDescription,articleBody,created_at):
+        self.articleId = articleId 
         self.articleName = articleName
         self.articleDescription = articleDescription
         self.articleBody = articleBody
@@ -41,14 +42,14 @@ def getAllArticle():
         return allArticles
     return jsonify({"message": "No article found."}), 404
 
-# @app.route("/article/<int:articleId>")
-# def getArticleByID(username):
-#     article = article.query.filter_by(articleId=articleId).first()
-#     if article:
-#         return jsonify(article.json())
-#     return jsonify({"message": "Article not found."}), 404
+@app.route("/article/<int:articleId>")
+def getArticleByID(articleId):
+    article = Article.query.filter_by(articleId=articleId).first()
+    if article:
+        return jsonify(article.json())
+    return jsonify({"message": "Article not found."}), 404
 
-@app.route("/article/create/", methods=['POST'])
+@app.route("/article/create", methods=['POST'])
 def createArticle():
     data = request.get_json()
     articleName = data['articleName']

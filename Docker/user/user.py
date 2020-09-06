@@ -6,9 +6,9 @@ from passlib.hash import sha256_crypt
 
 app = Flask(__name__)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/user'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/user'
 
 db = SQLAlchemy(app)
 CORS(app)
@@ -122,6 +122,19 @@ def getCredits(email):
     if user:
         credits = user.credits
         return jsonify({"credits": credits})
+    return jsonify({"message": "Error in retrieving credits."}), 404
+
+@app.route("/credits/<string:email>/<string:credits>/<string:buysell>", methods=['PUT'])
+def modifyCredits(email, credits, buysell):
+    user = User.query.filter_by(email=email).first()
+    credits = int(credits)
+    if user:
+        if buysell == '1':
+            user.credits -= credits
+        else:
+            user.credits += credits
+        db.session.commit()
+        return jsonify({"user": user.json()})
     return jsonify({"message": "Error in retrieving credits."}), 404
 
 if __name__ == '__main__':
