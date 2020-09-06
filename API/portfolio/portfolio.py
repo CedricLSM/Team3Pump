@@ -71,19 +71,17 @@ def get_current_holdings(email):
         if stocks["buy"]:
             qty = stocks["quantity"]
             price = stocks["price"]
-            oldQty = di[stocks["stock_ticker"]][0]
-            oldPrice = di[stocks["stock_ticker"]][1]
+
             di[stocks["stock_ticker"]][0] += qty
-            di[stocks["stock_ticker"]][1] = (qty*price + oldQty*oldPrice) / di[stocks["stock_ticker"]][0]
+            di[stocks["stock_ticker"]][1] += qty * price
         else:
             qty = stocks["quantity"]
-            price = stocks["price"]
             oldQty = di[stocks["stock_ticker"]][0]
             oldPrice = di[stocks["stock_ticker"]][1]
 
             di[stocks["stock_ticker"]][0] -= qty
-            di[stocks["stock_ticker"]][1] = (oldQty*oldPrice - qty*price ) / di[stocks["stock_ticker"]][0]
-            
+            di[stocks["stock_ticker"]][1] -= qty*(oldPrice/oldQty)
+
         if di[stocks["stock_ticker"]][0] <= 0:
             del di[stocks["stock_ticker"]]
 
