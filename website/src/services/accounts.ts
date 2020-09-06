@@ -30,6 +30,15 @@ export class AccountsService {
             }
         ) .catch(err => console.log(err))
     }
+
+    getCredits = async(email: string) => {
+        return axios.get(`${this.endpoint}/credits/${email}`)
+        .then(
+            (r) => {
+                return r.data.credits;
+            }
+        )
+    }
 }
 
 export default new AccountsService();
