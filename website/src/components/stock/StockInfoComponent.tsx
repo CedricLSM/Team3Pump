@@ -122,7 +122,7 @@ const StockInfoComponent = (props: IProps) => {
                             </tr>
                             {props.news.map((newsItem) => {
                                 return <tr>
-                                    <td><a href={newsItem.url} target="_blank">{decodeURIComponent(newsItem.title)}</a></td>
+                                    <td><a href={newsItem.url} target="_blank">{newsItem.title}</a></td>
                                 </tr>
                             })}
                         </Table>
