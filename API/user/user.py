@@ -124,6 +124,19 @@ def getCredits(email):
         return jsonify({"credits": credits})
     return jsonify({"message": "Error in retrieving credits."}), 404
 
+@app.route("/credits/<string:email>/<string:credits>/<string:buysell>", methods=['PUT'])
+def modifyCredits(email, credits, buysell):
+    user = User.query.filter_by(email=email).first()
+    credits = int(credits)
+    if user:
+        if buysell == '1':
+            user.credits -= credits
+        else:
+            user.credits += credits
+        db.session.commit()
+        return jsonify({"user": user.json()})
+    return jsonify({"message": "Error in retrieving credits."}), 404
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8500, debug=True)
 
