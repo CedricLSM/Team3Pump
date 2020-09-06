@@ -19,10 +19,10 @@ def get_stock(stockName):
 @app.route("/getMultipleStock/")
 def get_multiple_stock():
     # stock=request.args.get('symbol',default="GOOG")
-	"""
-	Input example: {"Stocks":["GOOG","MSFT"]}
-	news input int -> needs to be changed
-	"""
+    """
+    Input example: {"Stocks":["GOOG","MSFT"]}
+    news input int -> needs to be changed
+    """
     data = request.get_json()
     ticker = Ticker(data["stocks"])
     data = ticker.summary_detail
@@ -31,17 +31,17 @@ def get_multiple_stock():
 
 @app.route("/stockhistory")
 def get_stock_history():
-	stockticker = request.args.get('symbol', default="AAPL")
-	period = request.args.get('period', default="1y")
-	interval = request.args.get('interval', default="1wk")
-	quote = Ticker(stockticker)	
-	hist = quote.history(period=period, interval=interval)
-	data = hist.to_json()
-	return data
+    stockticker = request.args.get('symbol', default="AAPL")
+    period = request.args.get('period', default="1y")
+    interval = request.args.get('interval', default="1wk")
+    quote = Ticker(stockticker)    
+    hist = quote.history(period=period, interval=interval)
+    data = hist.to_json()
+    return data
 
 # @app.route("/")
 # def home():
 #     return render_template("homepage.html")
 
 if __name__ == "__main__":
-	app.run(host='0.0.0.0', port=8400,debug=True)
+    app.run(host='0.0.0.0', port=8400,debug=True)

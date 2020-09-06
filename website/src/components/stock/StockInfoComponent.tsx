@@ -2,6 +2,7 @@
 import React, { useState, MouseEvent, FormEvent } from 'react';
 import { Card, Table, Button, Form, Row, Col, Alert } from 'react-bootstrap';
 import { AiOutlineEdit } from "react-icons/ai";
+import axios from 'axios';
 
 interface IProps {
     ticker: string,
@@ -13,7 +14,8 @@ interface IProps {
 const StockInfoComponent = (props: IProps) => {
 
     const [edit, setEdit] = useState<boolean>(false);
-    const [newTicker, setNewTicker] = useState<string>("");
+    const [newTicker, setNewTicker] = useState<string>("AAPL");
+    const [quantity, setQuantity] = useState<number>(0);
     
     const onClick = () => {
         setEdit(true);
@@ -29,7 +31,27 @@ const StockInfoComponent = (props: IProps) => {
         props.setTicker(newTicker);
     })
 
-    console.log(props.news);
+    const handleBuy = (() => {
+        console.log("Buy", quantity);
+        axios.post("/api/portfolio/portfolio", 
+            {
+                ticker: newTicker,
+                quantity: quantity,
+                price: props.info.ask,
+                buy: true
+            })
+    })
+
+    const handleSell = (() => {
+        console.log("Sell", quantity);
+        axios.post("/api/portfolio/portfolio", 
+            {
+                ticker: newTicker,
+                quantity: quantity,
+                price: props.info.ask,
+                buy: false
+            })
+    })
 
     return (
         <Card>
@@ -69,8 +91,17 @@ const StockInfoComponent = (props: IProps) => {
                                 <td>{props.info.bid.toFixed(2)}</td>
                             </tr>
                             <tr>
-                                <td><Button variant="primary" block>Buy</Button></td>
-                                <td><Button block>Sell</Button></td>
+                                <td colSpan={2}> 
+                                    <Form>
+                                        <Form.Group>
+                                            <Form.Control type="number" onChange={e => setQuantity(e.target.value)} placeholder="Quantity"/>
+                                        </Form.Group>
+                                    </Form>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><Button variant="primary" block onClick={handleBuy}>Buy</Button></td>
+                                <td><Button block onClick={handleSell}>Sell</Button></td>
                             </tr>
                         </Table>
                         <Table>

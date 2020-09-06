@@ -6,7 +6,9 @@ import { Container } from 'react-bootstrap';
 const DefaultLayout = ({ children }) => {
   return (
     <>
-      <Header />
+      <Container className="pb-5">
+        <Header />
+      </Container>
       <Container>
           {children}
       </Container>
