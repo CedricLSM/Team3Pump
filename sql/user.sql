@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 04, 2020 at 09:19 AM
+-- Generation Time: Sep 07, 2020 at 05:24 AM
 -- Server version: 5.7.26
 -- PHP Version: 7.3.8
 
@@ -20,25 +20,27 @@ SET time_zone = "+00:00";
 -- Table structure for table `user`
 --
 
-CREATE DATABASE IF NOT EXISTS user DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE user;
-
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
+CREATE TABLE IF NOT EXISTS `user` (
   `email` varchar(30) NOT NULL,
   `password` varchar(512) NOT NULL,
   `name` varchar(30) NOT NULL,
   `risk_profile` int(11) NOT NULL,
   `telegram_id` varchar(20) DEFAULT NULL,
-  `credits` float(11) NOT NULL
+  `credits` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Truncate table before insert `user`
+--
+
+TRUNCATE TABLE `user`;
 --
 -- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`email`, `password`, `name`, `risk_profile`, `telegram_id`, `credits`) VALUES
-('cedric.lee.2018@smu.edu.sg', 'cedric123', 'Cedric Lee', 3,  NULL, 100000),
-('zychoo.2018@smu.edu.sg', 'choozy123', 'Choo Zheng Yang', 2, NULL, 100000),
-('edwin.lee.2018@smu.edu.sg', 'edwin123', 'Edwin Lee', 3,  NULL, 100000),
-('fionaaoye@gmail.com', 'fiona123', 'Fiona Teo', 1,  NULL, 100000);
+('cedric.lee@smu.edu.sg', '$5$rounds=535000$AHi2.ekugiAlIKaa$6FknXPXtU.bALxHktrxsdCfcXjPvyvbZ8T/pWYkbw63', 'Cedric Lee', 1, NULL, 100000),
+('edwin.lee@smu.edu.sg', '$5$rounds=535000$ZiXQikTn15qYUEoE$NOJolDX2IACxRoNqdDJvb6se/EfVQUMD7e/pgvlkGk.', 'Edwin Lee', 2, NULL, 100000),
+('fiona.teo@smu.edu.sg', '$5$rounds=535000$aZcTnTJk/hXkJG9X$nCGK2o97tm.SvDavcWoN9oOIk/GsaMA3wCEb1JSKyV.', 'Fiona Teo', 2, NULL, 100000),
+('zychoo@smu.edu.sg', '$5$rounds=535000$waVbZOXhZSdLhmzK$aif0F07elmcN2gdfJw44L4RZVV72KgKi7QSukQJJAU3', 'Choo Zheng Yang', 3, NULL, 100000),
+('chanelxy@smu.edu.sg', '$5$rounds=535000$NbXKGAEchl77hbKX$kjSEJQJvshKYom6hza8KTg.9f17MBbYbUDYN6yqRb68', 'Chanel Lee', 3, NULL, 100000);
