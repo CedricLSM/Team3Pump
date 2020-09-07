@@ -36,6 +36,9 @@ const LoginComponent = (props: IProps) => {
 
     return (
         <Col xs={2}>
+            <Row>
+                <img src="/logoblack.svg" width="100%"/>
+            </Row>
             <Form onSubmit={handleSubmit}>
                 <Form.Group>
                     <Form.Label>Email:</Form.Label>
