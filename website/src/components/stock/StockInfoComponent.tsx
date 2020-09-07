@@ -6,9 +6,9 @@ import axios from 'axios';
 
 interface IProps {
     credits: number,
-    setCredits: (credits: number) => void,
+    setCredits: any,
     ticker: string,
-    setTicker: (ticker: string) => void,
+    setTicker: any,
     info?: any,
     news?: any
 }
